@@ -1,0 +1,87 @@
+Index.asp
+<html>
+<head>
+   <title>Дипломный сайт "Спортивные организации г.Липецка"</title>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+</head>
+<body bgcolor="#CCCCDD" BACKGROUND = "background.gif">
+<a href="http://frend/proba/Uslug/index.asp" class="antiLine"><b>Список организаций</b></a>&nbsp;
+<a href="http://frend/proba/Uslug/SearchForm.asp" class="antiLine"><b>Поиск организации</b></a>&nbsp;
+<a href="http://frend/proba/Uslug/UploadForm.asp" class="antiLine"><b>Загрузка организации</b></a><br>
+<table BORDER=1 CELLSPACING=1 CELLPADDING=1 WIDTH="600" >
+<!-- Создадим таблицу шириной 640 пиксел -->
+<tr>
+  <td WIDTH="10" BGCOLOR="#FFCC99" valign = top>
+   <FONT face="Times New Roman" color=darkblue size=4 >Название организации</FONT>
+ </td>
+<td WIDTH="75" BGCOLOR="#FFCC99" valign = top>
+   <FONT face="Times New Roman" color=darkblue size=4 >Адресс</FONT>
+</td>
+<td WIDTH="100" BGCOLOR="#FFCC99" valign = top>
+   <FONT face="Times New Roman" color=darkblue size=4 >Телефон</FONT>
+</td>
+<td WIDTH="100" BGCOLOR="#FFCC99" valign = top>
+<FONT face="Times New Roman" color=darkblue size=4 >ИНН</FONT>
+</td>
+<td WIDTH="100" BGCOLOR="#FFCC99" valign = top>
+<FONT face="Times New Roman" color=darkblue size=4 >Часы работы</FONT>
+</td>
+</tr>
+<!--Наша таблица будет содержать всего одну колонку, напишем в ней пока заголовок-->
+<%
+Set db = Server.CreateObject("ADODB.Connection")
+ db.Open "Organ"
+ sSQL = "SELECT * FROM Organ"
+ Set rs = db.Execute(sSQL)
+ Cnt = 0				'Заводим счетчик организаций
+Do While NOT Rs.EOF		'Пока в базе есть организации (начало цикла)
+%>
+<tr>							<!--Новый ряд в таблице -->
+ <td>							<!--Новая ячейка -->	
+<%
+If rs.Fields ("Organization").value <> "No Text" Then
+ Link = "<a href= http://frend/proba/Uslug/ArtTempl.asp?ido=" & rs.Fields("IDO").value & ">" & rs.Fields("Organization").value & "</a>"
+End If
+Response.Write Link & "<br>"
+%>
+</td>
+<td>
+<%
+Response.Write rs.fields("Adress").value & "<br>"
+%>
+</td>
+<td>
+<%
+Response.Write rs.Fields("Phone").value & "</i><br>"
+%>
+</td>
+<td>
+<%
+ANN = rs.Fields("INN").value
+If ANN <> "NA" Then
+   Response.Write ANN
+End If
+%>
+</td>
+<td>
+<%
+Response.Write rs.fields("WorkTime").value & "<br>"
+%>
+</td>							<!--Конец ячейки -->
+</tr>							<!-- Конец ряда -->
+<%
+  Rs.MoveNext			'Переход к следующей записи в базе организаций 
+  Cnt = Cnt + 1			' Увеличение счетчика организаций
+  Loop				' Конец цикла
+db.Close
+Set db = Nothing
+%>
+<p><font size="3" color="#000010"><i>
+<%
+    Response.Write " Всего - " & Cnt & " организаций"
+%>
+</i></font>
+</font></p>
+</table>
+</body>
+</html >

@@ -1,0 +1,73 @@
+<html>
+<head>
+   <title>Дипломный сайт "Спортивные организации г.Липецка"</title>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+</head>
+<body BACKGROUND = "background.gif"> 
+<center>
+<a href="http://frend/proba/Uslug/indexB1.asp" class="antiLine"><b>Список бесплатных секций</b></a>&nbsp;
+<a href="http://frend/proba/Uslug/SearchFormB.asp" class="antiLine"><b>Поиск бесплатных услуг</b></a>&nbsp;
+<a href="http://frend/proba/Uslug/UploadFormB.asp" class="antiLine"><b>Загрузка бесплатных секций</b></a><br>
+<table BORDER=1 CELLSPACING=1 CELLPADDING=1 WIDTH="640" >
+<!-- Создадим таблицу шириной 640 пиксел -->
+<tr>
+  <td WIDTH="200" BGCOLOR="#FFCC99" valign = top>
+   <H4>Спортивная школа</H4>
+ </td>
+<td WIDTH="240" BGCOLOR="#FFCC99" valign = top>
+   <H4>Секция</H4>
+</td>
+<td WIDTH="200" BGCOLOR="#FFCC99" valign = top>
+   <H4>Возраст отбора</H4>
+</td>
+</tr>
+<%
+Set db = Server.CreateObject("ADODB.Connection")
+ db.Open "Organ"
+ sSQL = "SELECT * FROM Besplatno"
+ Set rs = db.Execute(sSQL)
+ Cnt = 0			'Заводим счетчик услуг
+ 
+Do While NOT Rs.EOF	'Пока в базе есть услуги (начало цикла)
+%>
+<tr>			<!--Новый ряд в таблице -->
+<td>
+<%
+Response.Write rs.Fields("Otdelenie").value & "<br>"
+%>
+</td>
+ <td>			<!--Новая ячейка -->	
+<%
+ If rs.Fields ("Otdelenie").value <> "No Text" Then
+ Link = "<a href= http://frend/proba/Uslug/ArtTemplB.asp?idb=" & rs.Fields("IDB").value & ">" & rs.Fields("Sekcia").value & "</a>"
+End If
+Response.Write Link & "<br>"
+%>
+</td>
+<td>
+<%
+ANN = rs.Fields("Vozrast").value
+If ANN <> "NA" Then
+   Response.Write ANN 
+End If
+%>
+</td>
+</td>			<!--Конец ячейки -->
+</tr>			<!-- Конец ряда -->
+<%
+  Rs.MoveNext		'Переход к следующей записи в базе услуг 
+  Cnt = Cnt + 1		' Увеличение счетчика услуг
+  Loop			' Конец цикла 
+db.Close
+Set db = Nothing
+%>
+<p><font size="3" color="#000000"><i>
+<%
+    Response.Write " Всего - " & Cnt & "услуг"
+%>
+</i></font>
+</font></p>
+</table>
+</center>
+</body>
+</html >

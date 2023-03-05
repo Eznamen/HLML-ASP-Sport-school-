@@ -1,0 +1,37 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+   <title>Удаление услуги</title>
+</head>
+<body BACKGROUND = "background.gif">
+<center>
+<b>Результат:</b><br>
+<%
+ variable = Session("IDsDel")
+ session.abandon
+ P = Request.QueryString("P")
+ Set db = Server.CreateObject("ADODB.Connection") 
+ db.Open "DSN=Organ;UID=sa;PWD=;"
+ SQLQuery = "Select * From WAPassword Where ID = 1"
+ Set rs = db.Execute(SQLQuery) 
+ DBP = rs.Fields("Password").value
+ Err = 0
+ If P <> DBP Then
+  Response.Write "ОШИБКА! Не правильно введен пароль!"
+  Err = 1
+ End If
+ db.Close
+ Set db = Nothing
+ If Err = 0 Then
+  Set db = Server.CreateObject("ADODB.Connection") 
+  db.Open "DSN=Organ;UID=sa;PWD=;"
+  SQLQuery = "Delete * From Uslugi Where IDU =" & variable
+  Set rs = db.Execute(SQLQuery) 
+  Response.Write "Информация была удалена из базы данных!"
+  db.Close
+  Set db = Nothing
+ End If
+%>
+</center>
+</body>
+</html>

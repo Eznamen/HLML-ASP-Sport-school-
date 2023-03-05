@@ -1,0 +1,43 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+   <title>Загрузка организации</title>
+</head>
+<body BACKGROUND = "background.gif"> 
+<font size=4 color="#332288">
+<center>
+<H3><b>Введите данные о новой организации</b><br></H1>
+<FORM NAME="mainform" METHOD="GET" ENCTYPE="multipart/form-data" ACTION="http://frend/proba/Uslug/Upload2DBS.asp">
+<b>Название: (*)</b><br>
+<input type=TEXT size=56 name="Organization"><br>
+<b>Адрес: (*)</b><br>
+ <input type="text" name="Adress" size="56"><br>
+<b>Телефон:</b><br>
+ <input type="text" name="Phone" size="26"><br>
+<b>Часы работы:</b><br>
+ <input type="text" name="WorkTime" size="26"><br>
+<b>ИНН:</b><br>
+ <input type="text" name="INN" size="26"><br>
+<b>Тип спортивной организации: (*)</b><br>
+ <select name="Subject">
+<%
+Set db = Server.CreateObject("ADODB.Connection") 
+    db.Open "DSN=Organ;UID=sa;PWD=;"
+   SQLQuery = "Select * From TypeOr"
+     Set rs = db.Execute(SQLQuery) 
+    Do While NOT Rs.EOF
+       Response.Write "<option>" & rs.Fields("TypeOrg").value & "</option>"
+       Rs.MoveNext
+      Loop
+  %> 
+ </select><br>
+<b>Пароль для входа в базу данных: (*)</b><br>
+<input type="password" name="Password"><br>
+<input type=SUBMIT value="Загрузка организации!" name="SUBMIT">
+<input type="reset" name="Reset" value="Обнулить форму"><br>
+<b>Поля со звездочкой обязательны для ввода!</b><br>
+</FORM>
+</center>
+</font>
+</body>
+</html>

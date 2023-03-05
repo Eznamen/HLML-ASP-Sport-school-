@@ -1,0 +1,127 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+   <title>Поиск спортклуба</title>
+</head>
+<body BACKGROUND = "background.gif">
+<b>Результаты поиска:</b><br>
+<table>
+<%
+AUT = Request.QueryString("Organization")
+ TIT = Request.QueryString("Adress")
+ SBJ = Request.QueryString("Subject")
+ DUR = Request.QueryString("During")
+ ORD = Request.QueryString("Order")
+ AdressConjunctor  = Request.QueryString("AdressSelector")
+ OrganizationConjunctor  = Request.QueryString("OrganizationSelector")
+ SubjectConjunctor = Request.QueryString("SubjectSelector")
+If AdressConjunctor = 1 Then
+  AConjunctor = "and"
+ Else
+  AConjunctor  = "or"
+ End If
+ If OrganizationConjunctor = 1 Then
+  OConjunctor = "and"
+ Else
+  OConjunctor  = "or"
+ End If
+ If SubjectConjunctor = 1 Then
+  SConjunctor = "and"
+ Else
+  SConjunctor  = "or"
+ End If
+Set db = Server.CreateObject("ADODB.Connection") 
+ db.Open "DSN=Organ;UID=sa;PWD=;"
+ GenerQuery   = "Select * From Organ "
+ WhereQuery   = "Where"
+ AdressQuery   = " Adress Like '" & TIT & "%' "
+ OrganizationQuery  = " Organization Like '" & AUT & "%' "
+ SubjectQuery = " Subject Like '" & SBJ & "%' "
+ OrderQuery   = "Order By '" & ORD & "' DESC"
+ '----  ----------------------------------------
+ If SBJ = "Any" Then 
+  If AUT = "" Then
+   '------------------------------------------------------------------------------------
+   If TIT = "" Then
+    SQLQuery = GenerQuery                               'все пусто
+   Else
+    SQLQuery = GenerQuery + WhereQuery + AdressQuery     'указана только услуга
+   End If
+   '------------------------------------------------------------------------------------
+  Else
+   '------------------------------------------------------------------------------------
+   If TIT = "" Then
+    SQLQuery = GenerQuery + WhereQuery + OrganizationQuery     'Пусто услуги, но не вид спора
+   Else
+    SQLQuery = GenerQuery + WhereQuery + OrganizationQuery + OConjunctor + AdressQuery   'поля не пусты
+   End If
+   '------------------------------------------------------------------------------------
+  End If
+ Else                                                   'Subject указан
+  If AUT = "" Then
+   '------------------------------------------------------------------------------------ 
+   If TIT = "" Then
+    SQLQuery = GenerQuery + WhereQuery + SubjectQuery
+   Else
+    SQLQuery = GenerQuery + WhereQuery + AdressQuery + AConjuctor + OConjunctor + SubjectQuery
+   End If
+   '------------------------------------------------------------------------------------
+  Else
+   '------------------------------------------------------------------------------------
+   If TIT = "" Then
+    SQLQuery = GenerQuery + OrganizationQuery + OConjunctor + SubjectQuery
+   Else
+    SQLQuery = GenerQuery + WhereQuery + OrganizationQuery + OConjunctor + AdressQuery + AConjunctor + SubjectQuery
+   End If
+   '------------------------------------------------------------------------------------
+  End If
+ End If
+ If ORD <> "Default" Then
+  If ORD = "Adress" Then
+   ORD = "IDO"
+  End If 
+  SQLQuery = SQLQuery + OrderQuery
+ End If
+'Response.Write SQLQuery
+ Set rs = db.Execute(SQLQuery) 
+ If rs.Eof Then
+  S = "Извините, по вашим критериям ни чего не найдено." & "<br>"
+  Response.Write S
+ End If
+ Cnt = 0
+ Do While NOT Rs.EOF
+%> 
+<tr>
+<td>
+<font size=3 color="#332288">
+<%
+  If rs.Fields("Adress").value <> "No Text" Then
+   Link = "<a href= http://frend/proba/Uslug/ArtTempl.asp?ido=" & rs.Fields("IDO").value & ">" & rs.Fields("Organization").value & "</a>"
+  End If
+  Response.Write rs.Fields("Subject").value & " " & Link & "<br>"
+  Response.Write "<i>Адрес:</i> " & rs.Fields("Adress").value & "<br>"
+  Response.Write "<i>Телефон: </i>" &  rs.Fields("Phone").value & "<br>"
+  Response.Write "<i>Время работы: </i>" &  rs.Fields("WorkTime").value & "<br>"
+  ANN = rs.Fields("INN").value
+  If ANN <> "NA" Then
+   Response.Write "<i>ИНН: </i>" & ANN  
+  End If
+%>
+<hr NOSHADE WIDTH="100%">
+</td>
+</tr>
+<%
+  Rs.MoveNext
+  Cnt = Cnt + 1
+  Loop
+ db.Close
+ Set db = Nothing
+%>
+<b><%Response.Write Cnt
+ Response.Write " организаций найдено по вашему критерию<br>"%>
+</b>
+</table>
+</center>
+</font>
+</body>
+</html>

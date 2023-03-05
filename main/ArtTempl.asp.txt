@@ -1,0 +1,90 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+   <title>Внутри организации</title>
+</head>
+<body BACKGROUND = "background.gif">
+<font size=4 color="#332288">
+<%
+ TheIDO = Request.QueryString("ido")
+ Set db = Server.CreateObject("ADODB.Connection")
+ db.Open "Organ" 
+ sSQL = "SELECT * FROM Organ Where IDO =" & TheIDO
+ Set rs = db.Execute(sSQL)
+ Session("IDsDel") = rs.Fields("IDO").value
+ Link = "<b><a href= http://frend/proba/Uslug/RemoveForm.asp?ido=" & rs.Fields("IDO").value & ">" & "Удалить организацию" & "</a></b>"
+ Response.Write Link & "<br>"
+ Response.Write "<b>" & rs.Fields("Subject").value & "</b>"
+ Response.Write " <b>" & rs.Fields("Organization").value & "</b><br>"
+ Response.Write "Адрес: <i><b>" & rs.Fields("Adress").value & "</i></b><br>"
+ Response.Write "Телефон для справок: <i><b>" & rs.Fields("Phone").value & "</i></b><br>"
+ Response.Write "Время работы: <i><b>" & rs.Fields("WorkTime").value & "</i></b><br>"
+ Response.Write "ИНН: " & rs.Fields("INN").value & "<hr>"
+ %>
+<center>
+<a href="http://frend/proba/Uslug/indexU.asp" class="antiLine"><b>Список услуг</b></a>&nbsp;
+<a href="http://frend/proba/Uslug/SearchFormU.asp" class="antiLine"><b>Поиск услуги</b></a>&nbsp;
+<a href="http://frend/proba/Uslug/UploadFormU.asp" class="antiLine"><b>Загрузка услуги</b></a><br>
+<table BORDER=1 CELLSPACING=1 CELLPADDING=1 WIDTH="640" >
+<!-- Создадим таблицу шириной 640 пиксел -->
+<tr>
+  <td WIDTH="200" BGCOLOR="#FFCC99" valign = top>
+   <H4>Вид спорта</H4>
+ </td>
+<td WIDTH="240" BGCOLOR="#FFCC99" valign = top>
+   <H4>Наименование услуги</H4>
+</td>
+<td WIDTH="200" BGCOLOR="#FFCC99" valign = top>
+   <H4>Тренер</H4>
+</td>
+</tr>
+<%
+  Set db = Server.CreateObject("ADODB.Connection")
+ db.Open "Organ"
+ sSQL = "SELECT * FROM Uslugi where IDO=" & rs.fields("IDO").value
+ Set rs = db.Execute(sSQL)
+ Cnt = 0			'Заводим счетчик услуг 
+Do While NOT Rs.EOF	'Пока в базе есть услуги (начало цикла)
+%>
+<tr>			<!--Новый ряд в таблице -->
+ <td>			<!--Новая ячейка -->	
+<%
+If rs.Fields ("Usluga").value <> "No Text" Then
+ Link = "<a href= http://frend/proba/Uslug/ArtTemplU.asp?idu=" & rs.Fields("IDU").value & ">" & rs.Fields("Sport").value & "</a>"
+End If
+Response.Write Link & "<br>"
+%>
+</td>
+<td>
+<%
+Response.Write rs.Fields("Usluga").value & "<br>"
+%>
+</td>
+<td>
+<%
+ANN = rs.Fields("Sotrudnik").value
+If ANN <> "NA" Then
+   Response.Write ANN 
+End If
+%>
+</td>
+</td>			<!--Конец ячейки -->
+</tr>			<!-- Конец ряда -->
+<%
+  Rs.MoveNext		'Переход к следующей записи в базе услуг 
+  Cnt = Cnt + 1		' Увеличение счетчика услуг
+  Loop			' Конец цикла
+db.Close
+Set db = Nothing
+%>
+<p><font size="3" color="#000000"><i>
+<%
+    Response.Write " Всего - " & Cnt & " услуг"
+%>
+</i></font>
+</font></p>
+</table>
+</center>
+</font>
+</body>
+</html>

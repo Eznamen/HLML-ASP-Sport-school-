@@ -1,0 +1,120 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+   <meta name="GENERATOR" content="Mozilla/4.7 [en] (Win98; I) [Netscape]">
+   <title>Загрузка услуги</title>
+</head>
+<body BACKGROUND = "background.gif">
+<%
+ '--------------------------------------------------------------------------
+ Set db = Server.CreateObject("ADODB.Connection") 
+ db.Open "DSN=Organ;UID=sa;PWD=;"
+ SQLQuery = "Select * From WAPassword Where ID = 1"
+ Set rs = db.Execute(SQLQuery) 
+ DBP = rs.Fields("Password").value
+ db.Close
+ Set db = Nothing
+ '--------------------------------------------------------------------------
+ Function FormatStr(InString)
+ on Error resume next
+  InString = Replace(InString, CHR(13) & CHR(10), "<br>")
+  InString = Replace(InString, CHR(10) & CHR(10), "</P><P>")
+  InString = Replace(InString, CHR(10), "<BR>")
+  InString = Replace(InString, "'", "`")
+  InString = Replace(InString, CHR(34), "/")
+  FormatStr = InString
+ End Function
+ '--------------------------------------------------------------------------
+ TIM = Now()
+ dateToday = Now()
+%>
+<%
+ I = 0
+ ErrA = 0
+ ErrT = 0
+ ErrP = 0
+ ErrC = 0
+ AUT = Request.QueryString("Usluga")
+ If AUT = "" Then ErrA = 1 End If
+ AUT = FormatStr(AUT)
+ TIT = Request.QueryString("Abonement")
+ If TIT = "" Then ErrT = 1 End If
+ TIT = FormatStr(TIT)
+ ART = Request.QueryString("VremjaProv")
+ If ART = "" Then
+  ART = "No Text"
+  If File1 = "No" Then
+   ErrC = 1
+  End If
+ End If
+ ART = FormatStr(ART)
+ SBJ = Request.QueryString("Org")
+SPR = Request.QueryString("Sport")
+ANN = Request.QueryString("Sotrudnik")
+ ANN = FormatStr(ANN)
+ If ANN = "" Then
+  ANN = "NA"
+ End If
+ Password = Request.QueryString("Password")
+ If Password = DBP Then
+  If ErrA = 0 and ErrT = 0 Then 
+  Set db = Server.CreateObject("ADODB.Connection") 
+  db.Open "DSN=Organ;UID=sa;PWD=;"
+  sSQL = "insert into Uslugi(Usluga,Abonement,VremjaProv,Org,Sport,Sotrudnik)values('" & AUT & "','" & TIT & "','" & ART  & "','" & SBJ & "','" & SPR &"','" & ANN & "')"  
+  Set rs = db.Execute(sSQL) 
+  db.Close
+  Set db = Nothing
+  End If
+ Else
+  ErrP = 1
+ End If
+%>
+&nbsp;
+<center>
+  <table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="710" >
+    <tr> 
+      <td></td>
+    </tr>
+    <tr> 
+      <td><b><font size=4 color="#332288">Сегодня: <%=Date()%></font></b></td>
+    </tr>
+    <tr> 
+      <td><b>Upload Results:</b></td>
+    </tr>
+    <tr> 
+      <td>
+<font size=4 color="#332288">
+      <a href="index.asp" class="antiLine"><b> Home </b></a><br>
+      <a href="http://frend/proba/Uslug/SearchFormU.asp" class="antiLine"> 
+      <b>Поиск услуги</b></a><br>
+      <a href="http://frend/proba/Uslug/UploadFormU.asp" class="antiLine"> 
+      <b>Загрузка услуги</b></a><br>
+     <p><b>
+       <%
+        C = Count
+        N = Now()
+        If ErrP = 0 and ErrA = 0 and ErrT = 0 and ErrC = 0 Then
+         Response.Write "Данные об услуге добавлены(" & C & " files) at " & N &"<br>"
+        End If
+        If ErrP = 1 Then
+         Response.Write "ОШИБКА! Не соотвествие пароля!"
+        End If
+        If ErrA = 1 Then
+         Response.Write "<br>" & "ОШИБКА! Не указано наименование услуги!"
+        End If
+	If ErrT = 1 Then
+         Response.Write "<br>" & "ОШИБКА! Стоимость абонемента не указана!"
+        End If
+        If ErrC = 1 Then
+         Response.Write "<br>" & "ОШИБКА! You should specify either article text or HTML file!"
+        End If
+        %>
+      </td>
+      </tr>
+      </b><br>
+  </table>
+</center>
+</font>
+</body>
+</html>

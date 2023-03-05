@@ -1,0 +1,28 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+   <title>Бесплатно</title>
+</head>
+<body BACKGROUND = "background.gif">
+<font size=4 color="#332288">
+<%
+ TheIDB = Request.QueryString("idb")
+ Set db = Server.CreateObject("ADODB.Connection")
+ db.Open "Organ"
+ sSQL = "SELECT * FROM Besplatno Where IDB =" & TheIDB
+ Set rs = db.Execute(sSQL)
+ Session("IDsDel") = rs.Fields("IDB").value
+ Link = "<b><a href= http://frend/proba/Uslug/RemoveFormB.asp?idb=" & rs.Fields("IDB").value & ">" & "Удалить услугу" & "</a></b>"
+ Response.Write Link & "<br>"
+Response.Write "<br><b>" & rs.Fields("Otdelenie").value & "</b><br>"
+ Response.Write "Производит набор детей в секцию <b>" & rs.Fields("Sekcia").value & "</b><br>"
+ Response.Write "Возраст приема детей: <i><b>" & rs.Fields("Vozrast").value & "</i></b><br>"
+ Response.Write "По адресу: <i><b>" & rs.Fields("Adress").value & "</i></b><br>"
+ Response.Write " ФИО директора: <i><b>" & rs.Fields("Director").value & "</i></b><br>"
+ Response.Write "Дополнительную информацию можно<br> получить по телефону: <i><b>" & rs.Fields("Telefon").value & "</i></b><br>"
+db.Close
+ Set db = Nothing
+%>
+</font>
+</body>
+</html>

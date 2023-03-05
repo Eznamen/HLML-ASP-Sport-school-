@@ -1,0 +1,53 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+   <title>Поиск</title>
+</head>
+<body BACKGROUND = "background.gif">
+<font size=4 color="#332288">
+<FORM METHOD="GET" ENCTYPE="multipart/form-data" ACTION="http://frend/proba/Uslug/SearchDBSB.asp">
+<center><H2><b>Поиск секции</b></H2></center>
+ <b>Секция:</b><br>
+ <input type=TEXT size=50 name="Sekcia">
+ <input type="radio" name="SekciaSelector" value="1" checked>
+ <b>И 
+ <input type="radio" name="SekciaSelector" value="2">
+ ИЛИ</b>
+ <br><b>Возраст отбора детей:</b><br>
+ <input type="text" name="Vozrast" size="50">
+ <input type="radio" name="VozrastSelector" value="1" checked>
+ <b>И 
+ <input type="radio" name="VozrastSelector" value="2">
+ ИЛИ</b> 
+ <br><b>ДЮСШ:</b>
+ <br><select name="Otdelenie">
+ <option selected>Any</option>
+ <%
+  Set db = Server.CreateObject("ADODB.Connection")
+  db.Open "DSN=Organ;UID=sa;PWD=;"
+  SQLQuery = "Select * From DYSHY"
+  Set rs = db.Execute(SQLQuery)
+  Do While NOT Rs.EOF
+   Response.Write "<option>" & rs.Fields("DUSHY").value & "</option>"
+   Rs.MoveNext
+  Loop
+  %>
+  </select>
+  <input type="radio" name="OtdelenieSelector" value="1" checked>
+  <b> И 
+  <input type="radio" name="OtdelenieSelector" value="2">
+  ИЛИ</b>
+  <br><b>Отсортировать результаты поиска по:</b><br>
+    <select name="Order">
+     <option selected>Default</option>
+     <option>Vozrast</option>
+     <option>Sekcia</option>
+     <option>Adress</option>
+     <option>Otdelenie</option>
+    </select>
+  <br><input type=SUBMIT value="Искать услугу!" name="SUBMIT">
+      <input type="reset" name="Reset" value="Обнулить форму">
+</FORM>
+</font>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+</head>
+<body BACKGROUND = "background.gif">
+<center>
+<FORM METHOD="GET" ENCTYPE="multipart/form-data" ACTION="http://frend/proba/Uslug/RemU.asp">
+ <b>Password: (*)</b><br>
+ <input type=password size=50 name="P"><br>
+ <input type=SUBMIT value="Удалить услугу!" name="SUBMIT">
+</FORM>
+</center>
+</body>
+</html>

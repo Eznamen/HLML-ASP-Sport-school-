@@ -1,0 +1,38 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+   <title>Услуга</title>
+</head>
+<body BACKGROUND = "background.gif">
+<font size=4 color="#332288">
+<%
+ TheIDU = Request.QueryString("idu")
+ Set db = Server.CreateObject("ADODB.Connection")
+ db.Open "Organ"
+ sSQL = "SELECT * FROM Uslugi Where IDU =" & TheIDU
+ Set rs = db.Execute(sSQL)
+ Session("IDsDel") = rs.Fields("IDU").value
+ Link = "<b><a href= http://frend/proba/Uslug/RemoveFormU.asp?idu=" & rs.Fields("IDU").value & ">" & "Удалить услугу" & "</a></b>"
+ Response.Write Link & "<br>"
+Response.Write "<br><b><i>" & rs.Fields("Org").value & "</b> предоставляет <br>"
+ Response.Write "занятия: <b>" & rs.Fields("Sport").value & "</b><br>"
+ Response.Write "Название услуги: <b> " & rs.Fields("Usluga").value & "</b><br><hr>"
+ Response.Write "Продолжительность занятия: <b>" & rs.Fields("VremjaProv").value & " минут</i></b><br>"
+  ABB = rs.Fields("Abonement").value
+  If ABB <> "0" Then
+  Response.Write "<i>Стоимость абонемента: <b>" & ABB & " рублей(Включает 8 занятий в месяц)</i></b><br>"
+  End If
+  ANN = rs.Fields("Razovoe").value
+  If ANN <> "0" Then
+   Response.Write "<i>Цена разового посещения: <b>" & ANN & " рублей</i></b><br>"
+  End If
+  SOT = rs.Fields("Sotrudnik").value
+  If SOT <> "NA" Then
+  Response.Write "<i>Тренер: <b>" & SOT & "</i></b>"
+  End If
+db.Close
+ Set db = Nothing
+%>
+</font>
+</body>
+</html>

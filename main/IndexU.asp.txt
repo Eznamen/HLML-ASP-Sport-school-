@@ -1,0 +1,72 @@
+<html>
+<head>
+   <title>Дипломный сайт "Спртивные организации г.Липецка"</title>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+</head>
+<body BACKGROUND = "background.gif">
+<center>
+<a href="http://frend/proba/Uslug/SearchFormU.asp" class="antiLine"><b>Поиск</b></a>&nbsp;
+<a href="http://frend/proba/Uslug/UploadFormU.asp" class="antiLine"><b>Загрузка</b></a><br>
+<table BORDER=1 CELLSPACING=1 CELLPADDING=1 WIDTH="640" >
+<!-- Создадим таблицу шириной 640 пиксел -->
+<tr>
+  <td WIDTH="200" BGCOLOR="#FFCC99" valign = top>
+   <H4>Вид спорта</H4>
+ </td>
+<td WIDTH="240" BGCOLOR="#FFCC99" valign = top>
+   <H4>Наименование услуги</H4>
+</td>
+<td WIDTH="200" BGCOLOR="#FFCC99" valign = top>
+   <H4>Тренер</H4>
+</td>
+</tr>
+<!-- Наша таблица, напишем в ней пока заголовок  -->
+<%
+Set db = Server.CreateObject("ADODB.Connection")
+ db.Open "Organ"
+ sSQL = "SELECT * FROM Uslugi"
+ Set rs = db.Execute(sSQL)
+ Cnt = 0			'Заводим счетчик услуг
+ Do While NOT Rs.EOF	'Пока в базе есть услуги (начало цикла)
+%>
+<tr>			<!--Новый ряд в таблице -->
+ <td>			<!--Новая ячейка -->	
+<%
+If rs.Fields ("Usluga").value <> "No Text" Then
+ Link = "<a href= http://frend/proba/Uslug/ArtTemplU.asp?idu=" & rs.Fields("IDU").value & ">" & rs.Fields("Sport").value & "</a>"
+End If
+Response.Write Link & "<br>"
+%>
+</td>
+<td>
+<%
+Response.Write rs.Fields("Usluga").value & "<br>"
+%>
+</td>
+<td>
+<%
+ANN = rs.Fields("Sotrudnik").value
+If ANN <> "NA" Then
+   Response.Write ANN 
+End If
+%>
+</td>
+</td>			<!--Конец ячейки -->
+</tr>			<!-- Конец ряда -->
+<%
+  Rs.MoveNext		'Переход к следующей записи в базе услуг
+  Cnt = Cnt + 1		' Увеличение счетчика услуг
+  Loop			' Конец цикла
+db.Close
+Set db = Nothing
+%>
+<p><font size="3" color="#000000"><i>
+<%
+    Response.Write " Всего - " & Cnt & " услуг"
+%>
+</i></font>
+</font></p>
+</table>
+</center>
+</body>
+</html >
